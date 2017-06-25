@@ -39,7 +39,7 @@
      ("" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (recover-buffers diminish exec-path-from-shell flycheck company elm-mode circe org-bullets magit rainbow-delimiters ess ##))))
+    (recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters ess ##))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -53,3 +53,4 @@
 (company-mode)
 (winner-mode 1)
 (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
+(when (memq window-system '(mac ns)) (global-set-key (kbd "C-z") nil))

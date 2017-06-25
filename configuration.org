@@ -26,8 +26,7 @@
   (setq default-input-method "MacOSX")
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'none)
-  (require 'ido)
-    (ido-mode t)
+  (require 'ido) (ido-mode t)
 #+END_SRC
 
 * Use sensible-defaults.el
@@ -407,7 +406,7 @@ all of them. That includes using =paredit-mode= to balance parentheses (and
 more!), =rainbow-delimiters= to color matching parentheses, and highlighting the
 whole expression when point is on a paren.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (setq lispy-mode-hooks
         '(clojure-mode-hook
           emacs-lisp-mode-hook
@@ -1257,7 +1256,7 @@ Enable [[https://github.com/hrs/engine-mode][engine-mode]] and define a few usef
 
 Just a few handy functions.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "C-w") 'backward-kill-word)
   (global-set-key (kbd "C-x C-k") 'kill-region)
   (global-set-key (kbd "M-/") 'hippie-expand)
