@@ -47,3 +47,5 @@ configuration.el
 .*.swp
 games/
 configuration.el
+url/cookies
+notes.html

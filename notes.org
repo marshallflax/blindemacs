@@ -1,0 +1,6 @@
+Biggest difference is in going to start/end of line.  Control-A still goes to the end of the line, but for blind people Control-E is the prefix for most emacspeak commands...so you have to do a Control-E a second time to get to the actual line.  To save typing, that's just "C-e C-e".
+
+While we're talking about lines, to stop line wrapping, there is the command "M-x visual-line-mode", which toggles the mode.  But we don't want to toggle it...you want to simply set it to disabled.  So do a "M-0 M-x visual-line-mode".  But you don't want to type "visual-line-mode", so "M-0 M-x visu<TAB>" suffices.
+
+- M-<TAB> http://orgmode.org/manual/Completion.html#Completion
+- http://orgmode.org/manual/Easy-templates.html#Easy-templates

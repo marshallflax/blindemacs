@@ -3,6 +3,9 @@
 * Emacsspeak
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  (defvar emacspeak-personality-voiceify-faces)
+  (defvar ido-process-ignore-lists)
+  (defvar org-ans2)
   (setq mac-default-speech-rate 450)
   (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
   (setq emacspeak-directory "~/gits/emacspeak")
@@ -1007,6 +1010,7 @@ Assume that I always want to kill the current buffer when hitting =C-x k=.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq exec-path (append exec-path '("/usr/local/bin")))
+  (setq exec-path (append exec-path '("~/.local/bin")))
 #+END_SRC
 ** Use =company-mode= everywhere
 
@@ -1166,7 +1170,7 @@ Use flycheck in the appropriate buffers:
 When splitting a window, I invariably want to switch to the new window. This
 makes that automatic.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)
   (global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
 #+END_SRC
