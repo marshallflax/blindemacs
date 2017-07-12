@@ -1,13 +1,4 @@
-(defvar org-ans2 nil)
-(defvar emacspeak-personality-voiceify-faces nil)
-(defvar ido-process-ignore-lists nil)
-
-(require 'package)
 (package-initialize)
-;; (setq package-enable-at-startup nil)
-
-(add-to-list 'load-path "/Users/mgflax/elisp/org-mode/lisp")
-
 (require 'org)
 
 (add-to-list 'package-archives
@@ -35,7 +26,8 @@
  '(cua-normal-cursor-color "#839496")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
- '(dtk-speech-rate-step 50)
+ '(dtk-speech-rate-base 150)
+ '(dtk-speech-rate-step 60)
  '(eldoc-idle-delay 10)
  '(electric-indent-mode t)
  '(elm-tags-exclude-elm-stuff nil)
@@ -45,6 +37,7 @@
  '(ido-max-prospects 3)
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(line-number-mode t)
+ '(mac-default-speech-rate 300)
  '(magit-diff-use-overlays nil)
  '(nrepl-sync-request-timeout 30)
  '(org-html-checkbox-type (quote unicode))

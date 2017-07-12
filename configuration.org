@@ -3,10 +3,10 @@
 * Emacsspeak
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (defvar emacspeak-personality-voiceify-faces)
-  (defvar ido-process-ignore-lists)
-  (defvar org-ans2)
-  (setq mac-default-speech-rate 450)
+  (defvar emacspeak-personality-voiceify-faces nil)
+  (defvar ido-process-ignore-lists nil)
+  (defvar org-ans1 nil)
+
   (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
   (setq emacspeak-directory "~/gits/emacspeak")
 
@@ -14,9 +14,7 @@
   (setq dtk-program "mac")
 
   (load-file "~/gits/emacspeak/lisp/mac-voices.el")
-  ;;; Voice rate:
   (load-file "~/gits/emacspeak/lisp/emacspeak-setup.el")
-  ;; Uncomment to try sound icons:
   ;(emacspeak-toggle-auditory-icons t)
   ;(emacspeak-sounds-select-theme "chimes-stereo/")
   (emacspeak-tts-startup-hook)

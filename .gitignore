@@ -43,7 +43,6 @@ flycheck_*.el
 # projectiles files
 .projectile
 ido.last
-configuration.el
 .*.swp
 games/
 configuration.el
