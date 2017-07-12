@@ -1,11 +1,13 @@
 #+TITLE: Emacs configuration
 
-* Emacsspeak
+* Load emacspeak 
 
 #+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Avoid warnings on startup
   (defvar emacspeak-personality-voiceify-faces nil)
   (defvar ido-process-ignore-lists nil)
   (defvar org-ans1 nil)
+  (defvar org-ans2 nil)
 
   (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
   (setq emacspeak-directory "~/gits/emacspeak")
@@ -18,16 +20,31 @@
   ;(emacspeak-toggle-auditory-icons t)
   ;(emacspeak-sounds-select-theme "chimes-stereo/")
   (emacspeak-tts-startup-hook)
-  ;; Mac keyboard (not emacspeak-related though)
+
 #+END_SRC
 
-* Stuff from original init.el
+* Generic mac-related stuff
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (setq default-input-method "MacOSX")
   (setq mac-command-modifier 'meta)
   (setq mac-option-modifier 'none)
-  (require 'ido) (ido-mode t)
+  (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
+#+END_SRC
+
+* Mac keyboard stuff, including interacting with system clipboard, disabling control-z
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (when (memq window-system '(mac ns)) (global-set-key (kbd "C-z") nil))
+
+  (defun ns-copy-including-primary ()
+    (interactive)
+    (call-interactively 'kill-ring-save)
+    (gui-set-selection 'PRIMARY (buffer-substring (point) (mark t))))
+
+  (define-key global-map (kbd "M-ç") 'ns-copy-including-primary)
+  (define-key global-map (kbd "M-√") 'yank)
+
 #+END_SRC
 
 * Use sensible-defaults.el
@@ -48,40 +65,6 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
 #+END_SRC
 
 * Add =resources= to =load-path=
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-to-list 'load-path "~/.emacs.d/resources/")
-#+END_SRC
-
-* Package management I use =cask= and =pallet= for managing packages.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (require 'cask "~/.cask/cask.el")
-  (cask-initialize)
-  (require 'pallet)
-#+END_SRC
-
-* =evil-mode=
-
-Use =evil=.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (evil-mode 1)
-#+END_SRC
-
-Enable =surround= everywhere.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (global-evil-surround-mode 1)
-#+END_SRC
-
-Bind =C-p= to fuzzy-finding files in the current project.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (define-key evil-normal-state-map (kbd "C-p") 'projectile-find-file)
-#+END_SRC
-
-* Utility functions
 
 Define a big ol' bunch of handy utility functions.
 
@@ -181,49 +164,6 @@ Define a big ol' bunch of handy utility functions.
     "Insert a good alphanumeric password of length 30."
     (interactive)
     (hrs/insert-random-string 30))
-#+END_SRC
-
-* UI preferences
-** Disable window chrome
-
-I don't usually use the menu or scroll bar, and they take up useful space.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (tool-bar-mode 0)
-  (menu-bar-mode 0)
-  (when window-system
-    (scroll-bar-mode -1))
-#+END_SRC
-
-** Use fancy lambdas
-
-Why not?
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (global-prettify-symbols-mode t)
-#+END_SRC
-
-** Custom solarized-dark theme
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (when window-system
-    (setq solarized-use-variable-pitch nil)
-    (setq solarized-height-plus-1 1.0)
-    (setq solarized-height-plus-2 1.0)
-    (setq solarized-height-plus-3 1.0)
-    (setq solarized-height-plus-4 1.0)
-    (setq solarized-high-contrast-mode-line t)
-    (load-theme 'solarized-dark t))
- #+END_SRC
-
-** Disable visual bell
-
-=sensible-defaults= replaces the audible bell with a visual one, but I really
-don't even want that (and my Emacs/Mac pair renders it poorly). This disables
-the bell altogether.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq ring-bell-function 'ignore)
 #+END_SRC
 
 ** Set default font and configure font resizing
@@ -341,318 +281,6 @@ programming.
   (add-hook 'vc-dir-mode-hook 'turn-on-diff-hl-mode)
 #+END_SRC
 
-* Programming customizations
-
-I like shallow indentation, but tabs are displayed as 8 characters by default.
-This reduces that.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq-default tab-width 2)
-#+END_SRC
-
-** CSS and Sass
-
-Indent 2 spaces and use =rainbow-mode= to display color-related words in the
-color they describe.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'css-mode-hook
-            (lambda ()
-              (rainbow-mode)
-              (setq css-indent-offset 2)))
-
-  (add-hook 'scss-mode-hook 'rainbow-mode)
-#+END_SRC
-
-Don't compile the current file every time I save.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq scss-compile-at-save nil)
-#+END_SRC
-
-** Haskell
-
-Enable =haskell-doc-mode=, which displays the type signature of a function, and
-use smart indentation.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq exec-path (append exec-path (list "~/.cabal/bin")))
-#+END_SRC
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'haskell-mode-hook
-            (lambda ()
-              (haskell-doc-mode)
-              (turn-on-haskell-indent)
-              (ghc-init)))
-#+END_SRC
-
-** JavaScript and CoffeeScript
-
-Indent everything by 2 spaces.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq js-indent-level 2)
-
-  (add-hook 'coffee-mode-hook
-            (lambda ()
-              (yas-minor-mode 1)
-              (setq coffee-tab-width 2)))
-#+END_SRC
-
-** Lisps
-
-All the lisps have some shared features, so we want to do the same things for
-all of them. That includes using =paredit-mode= to balance parentheses (and
-more!), =rainbow-delimiters= to color matching parentheses, and highlighting the
-whole expression when point is on a paren.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq lispy-mode-hooks
-        '(clojure-mode-hook
-          emacs-lisp-mode-hook
-          lisp-mode-hook
-          scheme-mode-hook))
-
-  (dolist (hook lispy-mode-hooks)
-    (add-hook hook (lambda ()
-                     (setq show-paren-style 'expression)
-                     (paredit-mode)
-                     (rainbow-delimiters-mode))))
-#+END_SRC
-
-If I'm writing in Emacs lisp I'd like to use =eldoc-mode= to display
-documentation.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-#+END_SRC
-
-My own silly language ([[https://github.com/hrs/blueprint][blueprint]]) is close enough to Scheme that it can use the
-same mode.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (hrs/add-auto-mode 'scheme-mode "\\.blu$")
-#+END_SRC
-
-** Magit
-
-The default behavior of =magit= is to ask before pushing. I haven't had any
-problems with accidentally pushing, so I'd rather not confirm that every time.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq magit-push-always-verify nil)
-#+END_SRC
-
-I sometimes use =git= from the terminal, and I'll use =emacsclient --tty= to
-write commits. I'd like to be in the insert state when my editor pops open for
-that.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'with-editor-mode-hook 'evil-insert-state)
-#+END_SRC
-
-** Prolog
-
-I don't write a lot of Prolog, but (oddly enough) I write more Prolog than Perl.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (hrs/add-auto-mode 'prolog-mode "\\.pl$")
-#+END_SRC
-
-** Projectile
-
-Projectile's default binding of =projectile-ag= to =C-c p s s= is clunky enough
-that I rarely use it (and forget it when I need it). This binds the
-easier-to-type =C-c C-v= and =C-c v= to useful searches.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (defun hrs/search-project-for-symbol-at-point ()
-    "Use `projectile-ag' to search the current project for `symbol-at-point'."
-    (interactive)
-    (projectile-ag (projectile-symbol-at-point)))
-
-  (global-set-key (kbd "C-c v") 'projectile-ag)
-  (global-set-key (kbd "C-c C-v") 'hrs/search-project-for-symbol-at-point)
-#+END_SRC
-
-** Python
-
-Indent 2 spaces.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq python-indent 2)
-#+END_SRC
-
-** Ruby and RSpec
-
-I use =chruby= to switch between versions of Ruby. This sets a default version
-to use within Emacs (for things like =xmp= or =rspec=).
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (chruby "ruby-2.3.0")
-#+END_SRC
-
-=rcodetools= provides =xmp=, which lets me evaluate a Ruby buffer and display
-the results in "magic" (=# =>=) comments.
-
-I disable warnings in Ruby because I disagree with a few of them (complaining
-about private =attr_reader=, especially) and they gunk up my buffer.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq xmpfilter-command-name
-        "ruby -S xmpfilter --no-warnings --dev --fork --detect-rbtest")
-  (require 'rcodetools)
-#+END_SRC
-
-There are a bunch of things I'd like to do when I open a Ruby buffer:
-
-- I don't want to insert an encoding comment.
-- I want to enable =yas=, =rspec=, =yard=, =flycheck=, and =projectile-rails=.
-- I'd like my RSpec tests to be run in a random order, and I'd like the output
-  to be colored.
-- =C-c C-c= should run =xmp=, to do that nifty "eval into comments" trick.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'ruby-mode-hook
-            (lambda ()
-              (setq ruby-insert-encoding-magic-comment nil)
-              (yas-minor-mode)
-              (rspec-mode)
-              (yard-mode)
-              (flycheck-mode)
-              (local-set-key "\r" 'newline-and-indent)
-              (setq rspec-command-options "--color --order random")
-              (define-key ruby-mode-map (kbd "C-c C-c") 'xmp)
-              (projectile-rails-mode)))
-#+END_SRC
-
-I associate =ruby-mode= with Gemfiles, gemspecs, Rakefiles, and Vagrantfiles.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (hrs/add-auto-mode
-   'ruby-mode
-   "\\Gemfile$"
-   "\\.rake$"
-   "\\.gemspec$"
-   "\\Guardfile$"
-   "\\Rakefile$"
-   "\\Vagrantfile$"
-   "\\Vagrantfile.local$")
-#+END_SRC
-
-When running RSpec tests I'd like to scroll to the first error.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'rspec-compilation-mode-hook
-            (lambda ()
-              (make-local-variable 'compilation-scroll-output)
-              (setq compilation-scroll-output 'first-error)))
-#+END_SRC
-
-** =sh=
-
-Indent with 2 spaces.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'sh-mode-hook
-            (lambda ()
-              (setq sh-basic-offset 2
-                    sh-indentation 2)))
-#+END_SRC
-
-** Slim
-
-If I'm editing Slim templates I'm probably in a Rails project. In that case, I'd
-like to still be able to run my tests from a Slim buffer.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'slim-mode-hook 'rspec-mode)
-#+END_SRC
-
-** =web-mode=
-
-If I'm in =web-mode=, I'd like to:
-
-- Color color-related words with =rainbow-mode=.
-- Still be able to run RSpec tests from =web-mode= buffers.
-- Indent everything with 2 spaces.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'web-mode-hook
-            (lambda ()
-              (rainbow-mode)
-              (rspec-mode)
-              (setq web-mode-markup-indent-offset 2)))
-#+END_SRC
-
-Use =web-mode= with embedded Ruby files, regular HTML, and PHP.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (hrs/add-auto-mode
-   'web-mode
-   "\\.erb$"
-   "\\.html$"
-   "\\.php$"
-   "\\.rhtml$")
-#+END_SRC
-
-** YAML
-
-If I'm editing YAML I'm usually in a Rails project. I'd like to be able to run
-the tests from any buffer.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (add-hook 'yaml-mode-hook 'rspec-mode)
-#+END_SRC
-
-* Terminal
-
-I use =multi-term= to manage my shell sessions.
-
-Use a login shell:
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq multi-term-program-switches "--login")
-#+END_SRC
-
-I'd rather not use Evil in the terminal. It's not especially useful (I don't use
-vi bindings in xterm) and it shadows useful keybindings (=C-d= for EOF, for
-example).
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (evil-set-initial-state 'term-mode 'emacs)
-#+END_SRC
-
-I add a bunch of hooks to =term-mode=:
-
-- I'd like links (URLs, etc) to be clickable.
-- Yanking in =term-mode= doesn't quite work. The text from the paste appears in
-  the buffer but isn't sent to the shell process. This correctly binds =C-y= and
-  middle-click to yank the way we'd expect.
-- I bind =M-o= to quickly change windows. I'd like that in terminals, too.
-- I don't want to perform =yasnippet= expansion when tab-completing.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (defun hrs/term-paste (&optional string)
-    (interactive)
-    (process-send-string
-     (get-buffer-process (current-buffer))
-     (if string string (current-kill 0))))
-
-  (add-hook 'term-mode-hook
-            (lambda ()
-              (goto-address-mode)
-              (define-key term-raw-map (kbd "C-y") 'hrs/term-paste)
-              (define-key term-raw-map (kbd "<mouse-2>") 'hrs/term-paste)
-              (define-key term-raw-map (kbd "M-o") 'other-window)
-              (setq yas-dont-activate t)))
-#+END_SRC
-
-* Publishing and task management with Org-mode
-
-** Display preferences
-
 I like to see an outline of pretty bullets instead of a list of asterisks.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -694,30 +322,16 @@ of an index file (my main todo list), and archive finished tasks in
 =~/org/archive.org=.
 
 #+BEGIN_SRC emacs-lisp :tangle no
-  (setq org-directory "~/org")
+  (setq org-directory "~/gits/org")
 
   (defun org-file-path (filename)
     "Return the absolute address of an org file, given its relative name."
     (concat (file-name-as-directory org-directory) filename))
 
-  (setq org-inbox-file "~/Dropbox/inbox.org")
+  ; (setq org-inbox-file "~/Dropbox/inbox.org")
   (setq org-index-file (org-file-path "index.org"))
   (setq org-archive-location
         (concat (org-file-path "archive.org") "::* From %s"))
-#+END_SRC
-
-I use [[http://agiletortoise.com/drafts/][Drafts]] to create new tasks, format them according to a template, and
-append them to an "inbox.org" file in my Dropbox. This function lets me import
-them easily from that inbox file to my index.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (defun hrs/copy-tasks-from-inbox ()
-    (when (file-exists-p org-inbox-file)
-      (save-excursion
-        (find-file org-index-file)
-        (goto-char (point-max))
-        (insert-file-contents org-inbox-file)
-        (delete-file org-inbox-file))))
 #+END_SRC
 
 I store all my todos in =~/org/index.org=, so I'd like to derive my agenda from

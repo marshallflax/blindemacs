@@ -1,10 +1,4 @@
 (package-initialize)
-(require 'org)
-
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/") t)
-
-
 
 ;; Added by Package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
@@ -49,7 +43,7 @@
      ("" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (fountain-mode intero haskell-mode recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters ess ##))))
+    (fountain-mode recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -62,16 +56,5 @@
 
 (company-mode)
 (winner-mode 1)
-(when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
-(when (memq window-system '(mac ns)) (global-set-key (kbd "C-z") nil))
-(add-hook 'haskell-mode-hook 'intero-mode)
 (define-key global-map (kbd "C-h C-k") 'describe-key)
-
-(defun ns-copy-including-primary ()
-  (interactive)
-  (call-interactively 'kill-ring-save)
-  (gui-set-selection 'PRIMARY (buffer-substring (point) (mark t))))
-
-(define-key global-map (kbd "M-ç") 'ns-copy-including-primary)
-(define-key global-map (kbd "M-√") 'yank)
-
+(require 'ido) (ido-mode t)
