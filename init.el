@@ -43,7 +43,7 @@
      ("" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (fountain-mode recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters))))
+    (recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -56,5 +56,4 @@
 
 (company-mode)
 (winner-mode 1)
-(define-key global-map (kbd "C-h C-k") 'describe-key)
 (require 'ido) (ido-mode t)

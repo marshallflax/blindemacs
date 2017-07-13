@@ -1,36 +1,37 @@
 #+TITLE: Emacs configuration
 
-* Load emacspeak 
+* Include
+** Load emacspeak 
 
-#+BEGIN_SRC emacs-lisp :tangle yes
-  ;; Avoid warnings on startup
-  (defvar emacspeak-personality-voiceify-faces nil)
-  (defvar ido-process-ignore-lists nil)
-  (defvar org-ans1 nil)
-  (defvar org-ans2 nil)
+ #+BEGIN_SRC emacs-lisp :tangle yes
+   ;; Avoid warnings on startup
+   (defvar emacspeak-personality-voiceify-faces nil)
+   (defvar ido-process-ignore-lists nil)
+   (defvar org-ans1 nil)
+   (defvar org-ans2 nil)
 
-  (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
-  (setq emacspeak-directory "~/gits/emacspeak")
+   (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
+   (setq emacspeak-directory "~/gits/emacspeak")
 
-  ;; (setq dtk-program "log-mac")
-  (setq dtk-program "mac")
+   ;; (setq dtk-program "log-mac")
+   (setq dtk-program "mac")
 
-  (load-file "~/gits/emacspeak/lisp/mac-voices.el")
-  (load-file "~/gits/emacspeak/lisp/emacspeak-setup.el")
-  ;(emacspeak-toggle-auditory-icons t)
-  ;(emacspeak-sounds-select-theme "chimes-stereo/")
-  (emacspeak-tts-startup-hook)
+   (load-file "~/gits/emacspeak/lisp/mac-voices.el")
+   (load-file "~/gits/emacspeak/lisp/emacspeak-setup.el")
+   ;(emacspeak-toggle-auditory-icons t)
+   ;(emacspeak-sounds-select-theme "chimes-stereo/")
+   (emacspeak-tts-startup-hook)
 
-#+END_SRC
+ #+END_SRC
 
-* Generic mac-related stuff
+** Generic mac-related stuff
 
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq default-input-method "MacOSX")
-  (setq mac-command-modifier 'meta)
-  (setq mac-option-modifier 'none)
-  (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
-#+END_SRC
+ #+BEGIN_SRC emacs-lisp :tangle yes
+   (setq default-input-method "MacOSX")
+   (setq mac-command-modifier 'meta)
+   (setq mac-option-modifier 'none)
+   (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
+ #+END_SRC
 
 * Mac keyboard stuff, including interacting with system clipboard, disabling control-z
 
@@ -53,8 +54,36 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (load-file "~/.emacs.d/sensible-defaults.el")
-  (sensible-defaults/use-all-settings)
-  (sensible-defaults/use-all-keybindings)
+
+  ; (sensible-defaults/use-all-settings)
+  (sensible-defaults/open-files-from-home-directory)
+  (sensible-defaults/increase-gc-threshold)
+  (sensible-defaults/backup-to-temp-directory)
+;;  (sensible-defaults/delete-trailing-whitespace)
+
+  (sensible-defaults/treat-camelcase-as-separate-words)
+  (sensible-defaults/automatically-follow-symlinks)
+  (sensible-defaults/make-scripts-executable)
+;;  (sensible-defaults/single-space-after-periods)
+  (sensible-defaults/offer-to-create-parent-directories-on-save)
+  (sensible-defaults/apply-changes-to-highlighted-region)
+  (sensible-defaults/overwrite-selected-text)
+  (sensible-defaults/ensure-that-files-end-with-newline)
+  (sensible-defaults/confirm-closing-emacs)
+  (sensible-defaults/quiet-startup)
+  (sensible-defaults/make-dired-file-sizes-human-readable)
+  (sensible-defaults/shorten-yes-or-no)
+  (sensible-defaults/always-highlight-code)
+  (sensible-defaults/refresh-buffers-when-files-change)
+  (sensible-defaults/show-matching-parens)
+  (sensible-defaults/flash-screen-instead-of-ringing-bell)
+  (sensible-defaults/set-default-line-length-to 80)
+  (sensible-defaults/open-clicked-files-in-same-frame-on-mac)
+  (sensible-defaults/yank-to-point-on-mouse-click)
+
+  (sensible-defaults/bind-commenting-and-uncommenting)
+  (sensible-defaults/bind-home-and-end-keys)
+  (sensible-defaults/bind-keys-to-change-text-size)
 #+END_SRC
 
 * Set personal information
@@ -166,7 +195,7 @@ Define a big ol' bunch of handy utility functions.
     (hrs/insert-random-string 30))
 #+END_SRC
 
-** Set default font and configure font resizing
+* Set default font and configure font resizing
 
 I'm partial to Inconsolata.
 
@@ -220,7 +249,7 @@ Note that this overrides the default font-related keybindings from
   (hrs/reset-font-size)
 #+END_SRC
 
-** Highlight the current line
+* Highlight the current line
 
 =global-hl-line-mode= softly highlights the background color of the line
 containing point. It makes it a bit easier to find point, and it's useful when
@@ -231,7 +260,7 @@ pairing or presenting code.
     (global-hl-line-mode))
 #+END_SRC
 
-** Hide certain modes from the modeline
+* Hide certain modes from the modeline
 
 I'd rather have only a few necessary mode identifiers on my modeline. This
 either hides or "renames" a variety of major or minor modes using the =diminish=
@@ -269,7 +298,7 @@ package.
   (diminish-major-mode 'python-mode-hook "Py")
 #+END_SRC
 
-** Highlight uncommitted changes
+* Highlight uncommitted changes
 
 Use the =diff-hl= package to highlight changed-and-uncommitted lines when
 programming.
@@ -315,7 +344,7 @@ new one (which shows the same information).
   (setq org-src-window-setup 'current-window)
 #+END_SRC
 
-** Task and org-capture management
+* Task and org-capture management
 
 Store my org files in =~/org=, maintain an inbox in Dropbox, define the location
 of an index file (my main todo list), and archive finished tasks in
@@ -360,7 +389,7 @@ Record the time that a todo was archived.
   (setq org-log-done 'time)
 #+END_SRC
 
-**** Capturing tasks
+* Capturing tasks
 
 Define a few common tasks as capture templates. Specifically, I frequently:
 
@@ -401,7 +430,7 @@ opening it up in order to start typing something, so this skips a step.
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
 #+END_SRC
 
-**** Keybindings
+* Keybindings
 
 Bind a few handy keys.
 
@@ -439,7 +468,7 @@ Hit =M-n= to quickly open up a capture template for a new todo.
             (lambda () (local-set-key (kbd "M-n") 'org-capture-todo)))
 #+END_SRC
 
-** Exporting
+* Exporting
 
 Allow export to markdown and beamer (for presentations).
 
@@ -484,7 +513,7 @@ when exporting.
   (setq org-export-with-smart-quotes t)
 #+END_SRC
 
-**** Exporting to HTML
+** Exporting to HTML
 
 Don't include a footer with my contact and publishing information at the bottom
 of every exported HTML document.
@@ -493,7 +522,7 @@ of every exported HTML document.
   (setq org-html-postamble nil)
 #+END_SRC
 
-**** Exporting to PDF
+** Exporting to PDF
 
 I want to produce PDFs with syntax highlighting in the code. The best way to do
 that seems to be with the =minted= package, but that package shells out to
@@ -872,18 +901,7 @@ Enable [[https://github.com/hrs/engine-mode][engine-mode]] and define a few usef
 
 Just a few handy functions.
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (global-set-key (kbd "C-w") 'backward-kill-word)
-  (global-set-key (kbd "C-x C-k") 'kill-region)
-  (global-set-key (kbd "M-/") 'hippie-expand)
-  (global-set-key (kbd "M-o") 'other-window)
-  (global-set-key (kbd "M-#") 'sort-lines)
-  (global-set-key (kbd "C-c s") 'multi-term)
-  (global-set-key (kbd "C-x g") 'magit-status)
+#+BEGIN_SRC emacs-lisp :tangle yes
+(define-key global-map (kbd "C-h C-k") 'describe-key)
 #+END_SRC
 
-Remap when working in terminal Emacs.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (define-key input-decode-map "\e[1;2A" [S-up])
-#+END_SRC
