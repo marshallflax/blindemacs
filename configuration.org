@@ -53,7 +53,7 @@
 Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for some basic settings.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (load-file "~/.emacs.d/sensible-defaults.el")
+  ;(load-file "~/.emacs.d/sensible-defaults.el")
 
   ;(sensible-defaults/use-all-settings)
 
