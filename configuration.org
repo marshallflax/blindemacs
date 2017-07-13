@@ -387,32 +387,6 @@ I like to see an outline of pretty bullets instead of a list of asterisks.
               (org-bullets-mode t)))
 #+END_SRC
 
-I like seeing a little downward-pointing arrow instead of the usual ellipsis
-(=...=) that org displays when there's stuff under a header.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-ellipsis "⤵")
-#+END_SRC
-
-Use syntax highlighting in source blocks while editing.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-src-fontify-natively t)
-#+END_SRC
-
-Make TAB act as if it were issued in a buffer of the language's major mode.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-src-tab-acts-natively t)
-#+END_SRC
-
-When editing a code snippet, use the current window rather than popping open a
-new one (which shows the same information).
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-src-window-setup 'current-window)
-#+END_SRC
-
 * Task and org-capture management
 
 Store my org files in =~/org=, maintain an inbox in Dropbox, define the location

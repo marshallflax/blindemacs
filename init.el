@@ -39,7 +39,11 @@
  '(mac-default-speech-rate 300)
  '(magit-diff-use-overlays nil)
  '(nrepl-sync-request-timeout 30)
+ '(org-ellipsis "⤵")
  '(org-html-checkbox-type (quote unicode))
+ '(org-src-fontify-natively t)
+ '(org-src-tab-acts-natively t)
+ '(org-src-window-setup (quote current-window))
  '(package-archive-priorities (quote (("melpa-stable" . 20) ("gnu" . 10) ("melpa" . 0))))
  '(package-archives
    (quote
