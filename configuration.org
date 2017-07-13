@@ -61,7 +61,7 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
   (setq default-directory "~/")
 
   ;(sensible-defaults/increase-gc-threshold)
-  (setq gc-cons-threshold 20000000)
+  ;Customize(setq gc-cons-threshold 20000000)
 
   ;(sensible-defaults/backup-to-temp-directory)
   (setq backup-directory-alist
@@ -76,7 +76,7 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
   (add-hook 'prog-mode-hook 'subword-mode)
 
   ; (sensible-defaults/automatically-follow-symlinks)
-  (setq vc-follow-symlinks t)
+  ; Customize (setq vc-follow-symlinks t)
 
   ; (sensible-defaults/make-scripts-executable)
   (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
@@ -101,17 +101,17 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
   ;(delete-selection-mode t)
 
   ; (sensible-defaults/ensure-that-files-end-with-newline)
-  (setq require-final-newline t)
+  ; (setq require-final-newline t)
 
   ; (sensible-defaults/confirm-closing-emacs)
-  (setq confirm-kill-emacs 'y-or-n-p)
+  ; Customize (setq confirm-kill-emacs 'y-or-n-p)
 
   ; (sensible-defaults/quiet-startup)
-  (setq inhibit-startup-message t)
-  (setq initial-scratch-message nil)
+  ; Customize (setq inhibit-startup-message t)
+  ; Customize (setq initial-scratch-message nil)
 
   ; (sensible-defaults/make-dired-file-sizes-human-readable)
-  (setq-default dired-listing-switches "-alh")
+  ; (setq-default dired-listing-switches "-alh")
 
   ; (sensible-defaults/shorten-yes-or-no)
   (fset 'yes-or-no-p 'y-or-n-p)
@@ -124,7 +124,7 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
 
   ; (sensible-defaults/show-matching-parens)
   (show-paren-mode t)
-  (setq show-paren-delay 0.0)
+  ; Customize (setq show-paren-delay 0.0)
 
   ; (sensible-defaults/flash-screen-instead-of-ringing-bell)
   (setq visible-bell t)

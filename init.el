@@ -16,10 +16,12 @@
    ["black" "#d55e00" "#009e73" "#f8ec59" "#0072b2" "#cc79a7" "#56b4e9" "white"])
  '(bongo-enabled-backends (quote (vlc)))
  '(bookmark-default-file "~/gits/personal/bookmarks")
+ '(confirm-kill-emacs (quote y-or-n-p))
  '(cua-global-mark-cursor-color "#2aa198")
  '(cua-normal-cursor-color "#839496")
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
+ '(dired-listing-switches "-alh")
  '(dtk-speech-rate-base 150)
  '(dtk-speech-rate-step 60)
  '(eldoc-idle-delay 10)
@@ -27,9 +29,12 @@
  '(elm-tags-exclude-elm-stuff nil)
  '(emacspeak-auditory-icon-function (quote emacspeak-queue-auditory-icon))
  '(eww-bookmarks-directory "~/gits/personal")
+ '(gc-cons-threshold 20000000)
  '(haskell-stylish-on-save t)
  '(ido-max-prospects 3)
+ '(inhibit-startup-screen t)
  '(initial-frame-alist (quote ((fullscreen . maximized))))
+ '(initial-scratch-message nil)
  '(line-number-mode t)
  '(mac-default-speech-rate 300)
  '(magit-diff-use-overlays nil)
@@ -43,7 +48,10 @@
      ("" . "https://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters))))
+    (recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters)))
+ '(show-paren-delay 0.0)
+ '(text-scale-mode-step 1.1)
+ '(vc-follow-symlinks t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
