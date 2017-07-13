@@ -1,6 +1,19 @@
 #+TITLE: Emacs configuration
 
 * Include
+
+** Generic mac-related stuff
+
+ #+BEGIN_SRC emacs-lisp :tangle yes
+   (setq default-input-method "MacOSX")
+   (setq mac-command-modifier 'meta)
+   (setq mac-option-modifier 'none)
+   (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
+
+   ;; (setq dtk-program "log-mac")
+   (setq dtk-program "mac")
+
+ #+END_SRC
 ** Load emacspeak 
 
  #+BEGIN_SRC emacs-lisp :tangle yes
@@ -13,24 +26,11 @@
    (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
    (setq emacspeak-directory "~/gits/emacspeak")
 
-   ;; (setq dtk-program "log-mac")
-   (setq dtk-program "mac")
-
    (load-file "~/gits/emacspeak/lisp/mac-voices.el")
    (load-file "~/gits/emacspeak/lisp/emacspeak-setup.el")
    ;(emacspeak-toggle-auditory-icons t)
    ;(emacspeak-sounds-select-theme "chimes-stereo/")
    (emacspeak-tts-startup-hook)
-
- #+END_SRC
-
-** Generic mac-related stuff
-
- #+BEGIN_SRC emacs-lisp :tangle yes
-   (setq default-input-method "MacOSX")
-   (setq mac-command-modifier 'meta)
-   (setq mac-option-modifier 'none)
-   (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
  #+END_SRC
 
 * Mac keyboard stuff, including interacting with system clipboard, disabling control-z
@@ -53,15 +53,8 @@
 Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for some basic settings.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  ;(load-file "~/.emacs.d/sensible-defaults.el")
-
-  ;(sensible-defaults/use-all-settings)
-
   ;(sensible-defaults/open-files-from-home-directory)
   (setq default-directory "~/")
-
-  ;(sensible-defaults/increase-gc-threshold)
-  ;Customize(setq gc-cons-threshold 20000000)
 
   ;(sensible-defaults/backup-to-temp-directory)
   (setq backup-directory-alist
@@ -69,90 +62,24 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
   (setq auto-save-file-name-transforms
 	`((".*" ,temporary-file-directory t)))
 
-  ;;;  (sensible-defaults/delete-trailing-whitespace)
-  ;;(add-hook 'before-save-hook 'delete-trailing-whitespace))
-
-  ; (sensible-defaults/treat-camelcase-as-separate-words)
-  (add-hook 'prog-mode-hook 'subword-mode)
-
-  ; (sensible-defaults/automatically-follow-symlinks)
-  ; Customize (setq vc-follow-symlinks t)
-
-  ; (sensible-defaults/make-scripts-executable)
-  (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
-  ;;  (sensible-defaults/single-space-after-periods)
-  ; (setq sentence-end-double-space nil)
-
-  ; (sensible-defaults/offer-to-create-parent-directories-on-save)
-  (add-hook 'before-save-hook
-	    (lambda ()
-	      (when buffer-file-name
-		(let ((dir (file-name-directory buffer-file-name)))
-		  (when (and (not (file-exists-p dir))
-			     (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
-		    (make-directory dir t))))))
 
 
-  ; (sensible-defaults/apply-changes-to-highlighted-region)
-  (transient-mark-mode t)
-
-  ;; (sensible-defaults/overwrite-selected-text)
-  ;(delete-selection-mode t)
-
-  ; (sensible-defaults/ensure-that-files-end-with-newline)
-  ; (setq require-final-newline t)
-
-  ; (sensible-defaults/confirm-closing-emacs)
-  ; Customize (setq confirm-kill-emacs 'y-or-n-p)
-
-  ; (sensible-defaults/quiet-startup)
-  ; Customize (setq inhibit-startup-message t)
-  ; Customize (setq initial-scratch-message nil)
-
-  ; (sensible-defaults/make-dired-file-sizes-human-readable)
-  ; (setq-default dired-listing-switches "-alh")
-
-  ; (sensible-defaults/shorten-yes-or-no)
   (fset 'yes-or-no-p 'y-or-n-p)
 
-  ; (sensible-defaults/always-highlight-code)
-  (global-font-lock-mode t)
 
-  ; (sensible-defaults/refresh-buffers-when-files-change)
-  (global-auto-revert-mode t)
+(defun sensible-defaults/comment-or-uncomment-region-or-line ()
+  "Comments or uncomments the region or the current line if
+there's no active region."
+  (interactive)
+  (let (beg end)
+    (if (region-active-p)
+        (setq beg (region-beginning) end (region-end))
+      (setq beg (line-beginning-position) end (line-end-position)))
+    (comment-or-uncomment-region beg end)))
 
-  ; (sensible-defaults/show-matching-parens)
-  (show-paren-mode t)
-  ; Customize (setq show-paren-delay 0.0)
-
-  ; (sensible-defaults/flash-screen-instead-of-ringing-bell)
-  (setq visible-bell t)
-
-  ; (sensible-defaults/set-default-line-length-to 80)
-  (setq-default fill-column 80)
-
-  ; (sensible-defaults/open-clicked-files-in-same-frame-on-mac)
-  (setq ns-pop-up-frames nil)
-
-
-  ; (sensible-defaults/yank-to-point-on-mouse-click)
-  (setq mouse-yank-at-point t)
-
-  ; (sensible-defaults/bind-commenting-and-uncommenting)
   (global-set-key (kbd "M-;")
 		  'sensible-defaults/comment-or-uncomment-region-or-line)
 
-  ; (sensible-defaults/bind-home-and-end-keys)
-  (global-set-key (kbd "<home>") 'move-beginning-of-line)
-  (global-set-key (kbd "<end>") 'move-end-of-line)
-
-  ; (sensible-defaults/bind-keys-to-change-text-size)
-  ; (define-key global-map (kbd "C-)") 'sensible-defaults/reset-text-size)
-  (define-key global-map (kbd "C-+") 'text-scale-increase)
-  (define-key global-map (kbd "C-=") 'text-scale-increase)
-  (define-key global-map (kbd "C-_") 'text-scale-decrease)
-  (define-key global-map (kbd "C--") 'text-scale-decrease)
 #+END_SRC
 
 * Set personal information
@@ -525,6 +452,8 @@ Allow =babel= to evaluate Emacs lisp, Ruby, dot, or Gnuplot code.
      (gnuplot . t)))
 #+END_SRC
 
+
+* Tangle ditaa for diagrams
 #+BEGIN_SRC emacs-lisp :tangle yes
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -649,38 +578,13 @@ files. We're using:
   (setq-default dired-listing-switches "-lhvA")
 #+END_SRC
 
-Use "j" and "k" to move around in =dired=.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (evil-define-key 'normal dired-mode-map (kbd "j") 'dired-next-line)
-  (evil-define-key 'normal dired-mode-map (kbd "k") 'dired-previous-line)
-#+END_SRC
-
-Kill buffers of files/directories that are deleted in =dired=.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq dired-clean-up-buffers-too t)
-#+END_SRC
-
-Always copy directories recursively instead of asking every time.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq dired-recursive-copies 'always)
-#+END_SRC
-
-Ask before recursively /deleting/ a directory, though.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq dired-recursive-deletes 'top)
-#+END_SRC
-
 * Editing settings
 
 ** Always kill current buffer
 
 Assume that I always want to kill the current buffer when hitting =C-x k=.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (global-set-key (kbd "C-x k") 'hrs/kill-current-buffer)
 #+END_SRC
 
@@ -939,12 +843,38 @@ Enable [[https://github.com/hrs/engine-mode][engine-mode]] and define a few usef
 Just a few handy functions.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-(define-key global-map (kbd "C-h C-k") 'describe-key)
-#+END_SRC
+  (define-key global-map (kbd "C-h C-k") 'describe-key)
 
-* Company mode, winner mode, ido mode
+  (global-set-key (kbd "<home>") 'move-beginning-of-line)
+  (global-set-key (kbd "<end>") 'move-end-of-line)
+
+  (define-key global-map (kbd "C-+") 'text-scale-increase)
+  (define-key global-map (kbd "C-=") 'text-scale-increase)
+  (define-key global-map (kbd "C-_") 'text-scale-decrease)
+  (define-key global-map (kbd "C--") 'text-scale-decrease)
+#+END_SRC
+ 
+* Enable lots of minor modes
 #+BEGIN_SRC  emacs-lisp :tangle yes
-(company-mode)
-(winner-mode 1)
-(require 'ido) (ido-mode t)
+  ; (sensible-defaults/apply-changes-to-highlighted-region)
+
+  (add-hook 'prog-mode-hook 'subword-mode)
+  (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+  (add-hook 'before-save-hook
+	    (lambda ()
+	      (when buffer-file-name
+		(let ((dir (file-name-directory buffer-file-name)))
+		  (when (and (not (file-exists-p dir))
+			     (y-or-n-p (format "Directory %s does not exist. Create it?" dir)))
+		    (make-directory dir t))))))
+
+
+  (global-font-lock-mode t)
+  (global-auto-revert-mode t)
+  (show-paren-mode t)
+  (transient-mark-mode t)
+
+  (company-mode)
+  (winner-mode 1)
+  (require 'ido) (ido-mode t)
 #+END_SRC
