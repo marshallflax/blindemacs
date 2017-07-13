@@ -426,12 +426,6 @@ place in the archive.
   (define-key global-map "\C-c\C-x\C-s" 'mark-done-and-archive)
 #+END_SRC
 
-Record the time that a todo was archived.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq org-log-done 'time)
-#+END_SRC
-
 * Capturing tasks
 
 Define a few common tasks as capture templates. Specifically, I frequently:
@@ -948,3 +942,9 @@ Just a few handy functions.
 (define-key global-map (kbd "C-h C-k") 'describe-key)
 #+END_SRC
 
+* Company mode, winner mode, ido mode
+#+BEGIN_SRC  emacs-lisp :tangle yes
+(company-mode)
+(winner-mode 1)
+(require 'ido) (ido-mode t)
+#+END_SRC

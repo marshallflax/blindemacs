@@ -41,6 +41,7 @@
  '(nrepl-sync-request-timeout 30)
  '(org-ellipsis "⤵")
  '(org-html-checkbox-type (quote unicode))
+ '(org-log-done (quote time))
  '(org-src-fontify-natively t)
  '(org-src-tab-acts-natively t)
  '(org-src-window-setup (quote current-window))
