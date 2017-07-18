@@ -28,6 +28,7 @@
  '(gc-cons-threshold 20000000)
  '(haskell-stylish-on-save t)
  '(ido-max-prospects 3)
+ '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-frame-alist (quote ((fullscreen . maximized))))
  '(initial-scratch-message nil)

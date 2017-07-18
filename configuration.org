@@ -62,11 +62,12 @@ Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for so
   (setq auto-save-file-name-transforms
 	`((".*" ,temporary-file-directory t)))
 
-
-
   (fset 'yes-or-no-p 'y-or-n-p)
+#+END_SRC
 
+* M-; to comment/uncomment
 
+#+BEGIN_SRC emacs-lisp :tangle yes
 (defun sensible-defaults/comment-or-uncomment-region-or-line ()
   "Comments or uncomments the region or the current line if
 there's no active region."
@@ -79,7 +80,6 @@ there's no active region."
 
   (global-set-key (kbd "M-;")
 		  'sensible-defaults/comment-or-uncomment-region-or-line)
-
 #+END_SRC
 
 * Set personal information
@@ -105,36 +105,24 @@ Define a big ol' bunch of handy utility functions.
     (interactive)
     (switch-to-buffer (make-temp-name "scratch-")))
 
-  (defun hrs/split-window-below-and-switch ()
-    "Split the window horizontally, then switch to the new pane."
-    (interactive)
-    (split-window-below)
-    (other-window 1))
-
-  (defun hrs/split-window-right-and-switch ()
-    "Split the window vertically, then switch to the new pane."
-    (interactive)
-    (split-window-right)
-    (other-window 1))
-
   (defun hrs/de-unicode ()
     "Tidy up a buffer by replacing all special Unicode characters
        (smart quotes, etc.) with their more sane cousins"
     (interactive)
     (let ((unicode-map '(("[\u2018\|\u2019\|\u201A\|\uFFFD]" . "'")
-                         ("[\u201c\|\u201d\|\u201e]" . "\"")
-                         ("\u2013" . "--")
-                         ("\u2014" . "---")
-                         ("\u2026" . "...")
-                         ("\u00A9" . "(c)")
-                         ("\u00AE" . "(r)")
-                         ("\u2122" . "TM")
-                         ("[\u02DC\|\u00A0]" . " "))))
+			 ("[\u201c\|\u201d\|\u201e]" . "\"")
+			 ("\u2013" . "--")
+			 ("\u2014" . "---")
+			 ("\u2026" . "...")
+			 ("\u00A9" . "(c)")
+			 ("\u00AE" . "(r)")
+			 ("\u2122" . "TM")
+			 ("[\u02DC\|\u00A0]" . " "))))
       (save-excursion
-        (loop for (key . value) in unicode-map
-              do
-              (goto-char (point-min))
-              (replace-regexp key value)))))
+	(loop for (key . value) in unicode-map
+	      do
+	      (goto-char (point-min))
+	      (replace-regexp key value)))))
 
   (defun hrs/beautify-json ()
     "Pretty-print the JSON in the marked region. Currently shells
@@ -176,14 +164,14 @@ Define a big ol' bunch of handy utility functions.
     (interactive)
     (let ((file-name (buffer-file-name)))
       (when file-name
-        (find-alternate-file (concat "/sudo::" file-name)))))
+	(find-alternate-file (concat "/sudo::" file-name)))))
 
   (defun hrs/insert-random-string (len)
     "Insert a random alphanumeric string of length len."
     (interactive)
     (let ((mycharset "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstyvwxyz"))
       (dotimes (i len)
-        (insert (elt mycharset (random (length mycharset)))))))
+	(insert (elt mycharset (random (length mycharset)))))))
 
   (defun hrs/generate-password ()
     "Insert a good alphanumeric password of length 30."
@@ -204,7 +192,7 @@ Note that this overrides the default font-related keybindings from
 =sensible-defaults=.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (setq hrs/default-font "Inconsolata")
+  (setq hrs/default-font "Courier New")
   (setq hrs/default-font-size 18)
   (setq hrs/current-font-size hrs/default-font-size)
 
@@ -580,7 +568,7 @@ files. We're using:
 
 * Editing settings
 
-** Always kill current buffer
+* Always kill current buffer
 
 Assume that I always want to kill the current buffer when hitting =C-x k=.
 
@@ -602,12 +590,6 @@ Assume that I always want to kill the current buffer when hitting =C-x k=.
 
 ** Always indent with spaces
 
-Never use tabs. Tabs are the devil’s whitespace.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq-default indent-tabs-mode nil)
-#+END_SRC
-
 ** Configure yasnippet
 
 I keep my snippets in =~/.emacs/snippets/text-mode=, and I always want =yasnippet=
@@ -628,41 +610,11 @@ at the correct indentation for Python).
 
 ** Configure =abbrev-mode=
 
-My email address is too long, so I like to keep some personal information as
-abbreviations.
-
-I'm prefixing them with semicolons to avoid collisions with real words.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (define-abbrev-table 'global-abbrev-table
-    '((";name" "Harry R. Schwartz")
-      (";email" "hello@harryrschwartz.com")
-      (";tb" "harry@thoughtbot.com")
-      (";site" "http://harryrschwartz.com")))
-#+END_SRC
-
-Always enable =abbrev-mode=:
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq-default abbrev-mode t)
-#+END_SRC
-
 ** Configure =ido=
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (setq ido-enable-flex-matching t)
-  (setq ido-everywhere t)
-  (ido-mode 1)
-  (ido-ubiquitous)
-  (flx-ido-mode 1) ; better/faster matching
-  (setq ido-create-new-buffer 'always) ; don't confirm to create new buffers
-  (ido-vertical-mode 1)
-  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
-#+END_SRC
 
 ** Use =smex= to handle =M-x= with =ido=
 
-#+BEGIN_SRC emacs-lisp :tangle no
+h#+BEGIN_SRC emacs-lisp :tangle no
   (smex-initialize)
 
   (global-set-key (kbd "M-x") 'smex)
@@ -749,10 +701,21 @@ Use flycheck in the appropriate buffers:
 
 ** Switch windows when splitting
 
-When splitting a window, I invariably want to switch to the new window. This
-makes that automatic.
+* Split-and-switch (no)
 
 #+BEGIN_SRC emacs-lisp :tangle no
+  (defun hrs/split-window-below-and-switch ()
+    "Split the window horizontally, then switch to the new pane."
+    (interactive)
+    (split-window-below)
+    (other-window 1))
+
+  (defun hrs/split-window-right-and-switch ()
+    "Split the window vertically, then switch to the new pane."
+    (interactive)
+    (split-window-right)
+    (other-window 1))
+
   (global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)
   (global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
 #+END_SRC
