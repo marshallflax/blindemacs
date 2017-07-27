@@ -1,37 +1,42 @@
 #+TITLE: Emacs configuration
 
-* Include
+* Look for executables in =/usr/local/bin=.
 
-** Generic mac-related stuff
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq exec-path (append exec-path '("/usr/local/bin")))
+  (setq exec-path (append exec-path '("~/.local/bin")))
+#+END_SRC
 
- #+BEGIN_SRC emacs-lisp :tangle yes
-   (setq default-input-method "MacOSX")
-   (setq mac-command-modifier 'meta)
-   (setq mac-option-modifier 'none)
-   (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
+* Generic mac-related stuff
 
-   ;; (setq dtk-program "log-mac")
-   (setq dtk-program "mac")
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (setq default-input-method "MacOSX")
+  (setq mac-command-modifier 'meta)
+  (setq mac-option-modifier 'none)
+  (when (memq window-system '(mac ns)) (exec-path-from-shell-initialize))
 
- #+END_SRC
-** Load emacspeak 
+  ;; (setq dtk-program "log-mac")
+  (setq dtk-program "mac")
 
- #+BEGIN_SRC emacs-lisp :tangle yes
-   ;; Avoid warnings on startup
-   (defvar emacspeak-personality-voiceify-faces nil)
-   (defvar ido-process-ignore-lists nil)
-   (defvar org-ans1 nil)
-   (defvar org-ans2 nil)
+#+END_SRC
+* Load emacspeak 
 
-   (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
-   (setq emacspeak-directory "~/gits/emacspeak")
+#+BEGIN_SRC emacs-lisp :tangle yes
+  ;; Avoid warnings on startup
+  (defvar emacspeak-personality-voiceify-faces nil)
+  (defvar ido-process-ignore-lists nil)
+  (defvar org-ans1 nil)
+  (defvar org-ans2 nil)
 
-   (load-file "~/gits/emacspeak/lisp/mac-voices.el")
-   (load-file "~/gits/emacspeak/lisp/emacspeak-setup.el")
-   ;(emacspeak-toggle-auditory-icons t)
-   ;(emacspeak-sounds-select-theme "chimes-stereo/")
-   (emacspeak-tts-startup-hook)
- #+END_SRC
+  (setq load-path (cons "~/gits/emacspeak/lisp" load-path))
+  (setq emacspeak-directory "~/gits/emacspeak")
+
+  (load-file "~/gits/emacspeak/lisp/mac-voices.el")
+  (load-file "~/gits/emacspeak/lisp/emacspeak-setup.el")
+  ;(emacspeak-toggle-auditory-icons t)
+  ;(emacspeak-sounds-select-theme "chimes-stereo/")
+  (emacspeak-tts-startup-hook)
+#+END_SRC
 
 * Mac keyboard stuff, including interacting with system clipboard, disabling control-z
 
@@ -48,9 +53,9 @@
 
 #+END_SRC
 
-* Use sensible-defaults.el
+* Inline sensible-defaults.el
 
-Use [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for some basic settings.
+Merged from [[https://github.com/hrs/sensible-defaults.el][sensible-defaults.el]] for some basic settings.
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   ;(sensible-defaults/open-files-from-home-directory)
@@ -136,11 +141,6 @@ Define a big ol' bunch of handy utility functions.
     (interactive)
     (let ((fill-column (point-max)))
       (fill-paragraph nil)))
-
-  (defun hrs/kill-current-buffer ()
-    "Kill the current buffer without prompting."
-    (interactive)
-    (kill-buffer (current-buffer)))
 
   (defun hrs/visit-last-dired-file ()
     "Open the last file in an open dired buffer."
@@ -568,20 +568,6 @@ files. We're using:
 
 * Editing settings
 
-* Always kill current buffer
-
-Assume that I always want to kill the current buffer when hitting =C-x k=.
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (global-set-key (kbd "C-x k") 'hrs/kill-current-buffer)
-#+END_SRC
-
-** Look for executables in =/usr/local/bin=.
-
-#+BEGIN_SRC emacs-lisp :tangle yes
-  (setq exec-path (append exec-path '("/usr/local/bin")))
-  (setq exec-path (append exec-path '("~/.local/bin")))
-#+END_SRC
 ** Use =company-mode= everywhere
 
 #+BEGIN_SRC emacs-lisp :tangle yes
@@ -703,23 +689,6 @@ Use flycheck in the appropriate buffers:
 
 * Split-and-switch (no)
 
-#+BEGIN_SRC emacs-lisp :tangle no
-  (defun hrs/split-window-below-and-switch ()
-    "Split the window horizontally, then switch to the new pane."
-    (interactive)
-    (split-window-below)
-    (other-window 1))
-
-  (defun hrs/split-window-right-and-switch ()
-    "Split the window vertically, then switch to the new pane."
-    (interactive)
-    (split-window-right)
-    (other-window 1))
-
-  (global-set-key (kbd "C-x 2") 'hrs/split-window-below-and-switch)
-  (global-set-key (kbd "C-x 3") 'hrs/split-window-right-and-switch)
-#+END_SRC
-
 ** Mass editing of =grep= results
 
 I like the idea of mass editing =grep= results the same way I can edit filenames
@@ -738,14 +707,6 @@ results and =C-c C-c= to stop, just like in =dired=.
   (setq wgrep-auto-save-buffer t)
 #+END_SRC
 
-** Configure =wrap-region=
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (wrap-region-global-mode t)
-  (wrap-region-add-wrapper "/" "/" nil 'ruby-mode)
-  (wrap-region-add-wrapper "`" "`" nil '(markdown-mode ruby-mode))
-#+END_SRC
-
 ** Split horizontally for temporary buffers
 
 Horizonal splits are nicer for me, since I usually use a wide monitor. This is
@@ -758,12 +719,6 @@ handy for handling temporary buffers (like compilation or test output).
 
   (add-hook 'temp-buffer-window-setup-hook
             'hrs/split-horizontally-for-temp-buffers)
-#+END_SRC
-
-** Use projectile everywhere
-
-#+BEGIN_SRC emacs-lisp :tangle no
-  (projectile-global-mode)
 #+END_SRC
 
 ** Add a bunch of engines for =engine-mode=
@@ -840,4 +795,5 @@ Just a few handy functions.
   (company-mode)
   (winner-mode 1)
   (require 'ido) (ido-mode t)
+  (tool-bar-mode 0)
 #+END_SRC

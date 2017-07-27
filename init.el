@@ -38,9 +38,11 @@
  '(mouse-yank-at-point t)
  '(nrepl-sync-request-timeout 30)
  '(ns-pop-up-frames nil)
+ '(org-agenda-files (quote ("~/gits/judith/hate.org")))
  '(org-ellipsis "⤵")
  '(org-html-checkbox-type (quote unicode))
  '(org-log-done (quote time))
+ '(org-return-follows-link t)
  '(org-src-fontify-natively t)
  '(org-src-tab-acts-natively t)
  '(org-src-window-setup (quote current-window))
@@ -48,12 +50,13 @@
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa-stable" . "https://stable.melpa.org/packages/")
-     ("" . "https://melpa.org/packages/"))))
+     ("melpa-stable" . "http://stable.melpa.org/packages/")
+     ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters)))
+    (org-ref recover-buffers diminish exec-path-from-shell flycheck company circe org-bullets magit rainbow-delimiters)))
  '(show-paren-delay 0.0)
+ '(split-width-threshold nil)
  '(text-scale-mode-step 1.1)
  '(vc-follow-symlinks t)
  '(visible-bell t))
