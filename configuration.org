@@ -17,7 +17,6 @@
 
   ;; (setq dtk-program "log-mac")
   (setq dtk-program "mac")
-
 #+END_SRC
 * Load emacspeak 
 
@@ -33,6 +32,7 @@
 
   (load-file "~/gits/emacspeak/lisp/mac-voices.el")
   (load-file "~/gits/emacspeak/lisp/emacspeak-setup.el")
+  (load-file "~/gits/emacspeak/lisp/emacspeak-wizards.el")
   ;(emacspeak-toggle-auditory-icons t)
   ;(emacspeak-sounds-select-theme "chimes-stereo/")
   (emacspeak-tts-startup-hook)

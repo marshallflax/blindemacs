@@ -23,6 +23,7 @@
  '(electric-indent-mode t)
  '(elm-tags-exclude-elm-stuff nil)
  '(emacspeak-auditory-icon-function (quote emacspeak-queue-auditory-icon))
+ '(emacspeak-emergency-tts-server "mac")
  '(emacspeak-play-args "-q")
  '(emacspeak-play-program "/usr/local/bin/play")
  '(emacspeak-soxplay-command "/usr/local/bin/play -v 0.5 %s earwax")
